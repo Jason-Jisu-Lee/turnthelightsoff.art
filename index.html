@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turn The Lights Off</title>
+    <style>
+        /* CSS Reset and Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Background Animation (Subtle Flare) */
+        .bg-flare {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 0, 150, 0.1), transparent 60%);
+            animation: pulse 4s infinite ease-in-out;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.5; transform: scale(1); }
+        }
+
+        /* Top Right Venmo Text */
+        .donation-text {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            z-index: 10;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .donation-text span {
+            display: block;
+            font-weight: bold;
+            color: #ff0099; /* Neon Pink */
+            margin-top: 5px;
+        }
+
+        .qr-code {
+            margin-top: 10px;
+            background: white;
+            padding: 5px;
+            border-radius: 4px;
+            width: 100px;
+            height: 100px;
+            box-shadow: 0 0 10px rgba(255, 0, 150, 0.3);
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Left Side Instructions */
+        .instructions {
+            position: absolute;
+            left: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            max-width: 300px;
+            z-index: 10;
+        }
+
+        .instructions ol {
+            list-style: none;
+            counter-reset: item;
+        }
+
+        .instructions li {
+            counter-increment: item;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            font-weight: 300;
+            opacity: 0.9;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .instructions li::before {
+            content: counter(item) ".";
+            font-weight: bold;
+            color: #00dbde; /* Neon Cyan */
+            margin-right: 10px;
+            min-width: 20px;
+        }
+
+        /* Center Button Area */
+        .center-stage {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .button-row {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .counter-text {
+            margin-top: 40px;
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.8;
+            letter-spacing: 1px;
+            color: #00dbde;
+        }
+
+        .party-btn {
+            background: transparent;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            padding: 20px 40px;
+            font-size: 2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            outline: none;
+        }
+
+        .party-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 0, 150, 0.5);
+            border-color: #ffffff;
+        }
+
+        /* Tooltip */
+        .tooltip-container {
+            position: relative;
+            margin-left: 10px;
+            margin-top: -10px; /* Superscript-ish positioning */
+        }
+
+        .tooltip-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: help;
+            transition: all 0.2s;
+        }
+
+        .tooltip-icon:hover {
+            border-color: #ffffff;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above */
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            border: 1px solid #333;
+            pointer-events: none;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .instructions {
+                position: static;
+                transform: none;
+                margin-bottom: 40px;
+                text-align: center;
+            }
+            
+            .instructions li {
+                justify-content: center;
+            }
+
+            .donation-text {
+                position: static;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            .center-stage {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-flare"></div>
+
+    <div class="donation-text">
+        Please give me money so I can party harder:
+        <div class="qr-code">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://venmo.com/lightpaper" alt="Venmo QR Code">
+        </div>
+        <span>@lightpaper</span>
+    </div>
+
+    <div class="instructions">
+        <ol>
+            <li>Prepare to party</li>
+            <li>Click "Let's Party"</li>
+            <li>Skip the ad and crank up the volumn</li>
+            <li>Dance until you fade into the moment</li>
+        </ol>
+    </div>
+
+    <div class="center-stage">
+        <div class="button-row">
+            <button class="party-btn" id="partyButton">Let's Party</button>
+            <div class="tooltip-container">
+                <span class="tooltip-icon">?</span>
+                <span class="tooltip-text">This opens a Youtube link to "Turn The Lights Off" by Kato</span>
+            </div>
+        </div>
+        <div class="counter-text">
+            Faded into the moment: <span id="clickCount">0</span>
+        </div>
+    </div>
+
+    <script>
+        const countElement = document.getElementById('clickCount');
+        let count = localStorage.getItem('partyCount') || 0;
+        countElement.textContent = count;
+
+        document.getElementById('partyButton').addEventListener('click', function() {
+            const url = "https://www.youtube.com/watch?v=cXYn-lUQ4PU";
+            
+            // Update count
+            count++;
+            countElement.textContent = count;
+            localStorage.setItem('partyCount', count);
+
+            // Open in new tab
+            window.open(url, '_blank');
+        });
+    </script>
+</body>
+</html>
