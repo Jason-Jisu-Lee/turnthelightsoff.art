@@ -15,9 +15,10 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-attachment: fixed; /* Fixes background scrolling issue */
             color: #ffffff;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh; /* Changed from height to min-height */
+            overflow-x: hidden; /* Prevent horizontal scroll */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -216,11 +217,12 @@
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
-                padding: 40px 20px;
-                justify-content: center;
+                padding: 60px 20px 40px 20px; /* Added top padding */
+                justify-content: flex-start; /* Start from top */
                 height: auto;
                 min-height: 100vh;
                 overflow-y: auto;
+                overflow-x: hidden;
             }
 
             /* 1. Instructions at the top */
