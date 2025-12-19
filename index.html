@@ -258,7 +258,6 @@
         <ol>
             <li>Prepare to party</li>
             <li>Click "Let's Party"</li>
-            <li>Skip the ad and crank up the volumn</li>
             <li>Dance until you fade into the moment</li>
         </ol>
     </div>
@@ -272,22 +271,34 @@
             </div>
         </div>
         <div class="counter-text">
-            Faded into the moment: <span id="clickCount">0</span>
+            Losing yourself with <span id="clickCount">...</span> people
         </div>
     </div>
 
     <script>
         const countElement = document.getElementById('clickCount');
-        let count = localStorage.getItem('partyCount') || 0;
-        countElement.textContent = count;
+        
+        // Fetch initial count
+        fetch('https://api.counterapi.dev/v1/turnthelightsoff/click/')
+            .then(response => response.json())
+            .then(data => {
+                countElement.textContent = data.count;
+            })
+            .catch(err => {
+                console.error('Error fetching count:', err);
+                countElement.textContent = 'many'; // Fallback
+            });
 
         document.getElementById('partyButton').addEventListener('click', function() {
             const url = "https://www.youtube.com/watch?v=cXYn-lUQ4PU";
             
-            // Update count
-            count++;
-            countElement.textContent = count;
-            localStorage.setItem('partyCount', count);
+            // Increment count
+            fetch('https://api.counterapi.dev/v1/turnthelightsoff/click/up')
+                .then(response => response.json())
+                .then(data => {
+                    countElement.textContent = data.count;
+                })
+                .catch(err => console.error('Error updating count:', err));
 
             // Open in new tab
             window.open(url, '_blank');
