@@ -261,6 +261,59 @@
                 width: 100%;
             }
         }
+
+        /* Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            box-shadow: 0 0 30px rgba(255, 0, 150, 0.5);
+            background: #000;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close-btn {
+            margin-top: 20px;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-decoration: none;
+            background: transparent;
+            border: 1px solid #fff;
+            padding: 10px 20px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .close-btn:hover {
+            background: #fff;
+            color: #000;
+        }
     </style>
 </head>
 <body>
@@ -296,8 +349,19 @@
         </div>
     </div>
 
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-container">
+            <iframe id="videoFrame" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        <button class="close-btn" id="closeBtn">Close & Stop Party</button>
+    </div>
+
     <script>
         const countElement = document.getElementById('clickCount');
+        const modal = document.getElementById('videoModal');
+        const videoFrame = document.getElementById('videoFrame');
+        const closeBtn = document.getElementById('closeBtn');
         
         // Fetch initial count
         fetch('https://api.counterapi.dev/v1/turnthelightsoff/click/')
@@ -311,8 +375,6 @@
             });
 
         document.getElementById('partyButton').addEventListener('click', function() {
-            const url = "https://www.youtube.com/watch?v=cXYn-lUQ4PU";
-            
             // Increment count
             fetch('https://api.counterapi.dev/v1/turnthelightsoff/click/up')
                 .then(response => response.json())
@@ -321,8 +383,24 @@
                 })
                 .catch(err => console.error('Error updating count:', err));
 
-            // Open in new tab
-            window.open(url, '_blank');
+            // Show modal and play video
+            modal.style.display = 'flex';
+            // Using embed URL with autoplay
+            videoFrame.src = "https://www.youtube.com/embed/cXYn-lUQ4PU?autoplay=1";
+        });
+
+        function closeModal() {
+            modal.style.display = 'none';
+            videoFrame.src = ""; // Stop video
+        }
+
+        closeBtn.addEventListener('click', closeModal);
+        
+        // Close on background click
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
         });
     </script>
 </body>
