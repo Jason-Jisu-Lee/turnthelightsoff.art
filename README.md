@@ -1,4 +1,4 @@
 # turnthelightsoff.art
 For those wishing to fade away..
 
-https://wwww.turnthelightsoff.art
+https://www.turnthelightsoff.art
