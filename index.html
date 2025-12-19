@@ -216,28 +216,47 @@
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
-                padding: 20px;
+                padding: 40px 20px;
+                justify-content: center;
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto;
             }
 
+            /* 1. Instructions at the top */
             .instructions {
                 position: static;
                 transform: none;
+                order: 1;
                 margin-bottom: 40px;
                 text-align: center;
+                width: 100%;
             }
             
-            .instructions li {
-                justify-content: center;
+            .instructions ol {
+                display: inline-block;
+                text-align: left;
             }
 
+            .instructions li {
+                justify-content: flex-start;
+            }
+
+            /* 2. Button in the middle */
+            .center-stage {
+                order: 2;
+                margin: 20px 0;
+                width: 100%;
+            }
+
+            /* 3. Donation at the bottom */
             .donation-text {
                 position: static;
-                margin-bottom: 20px;
+                order: 3;
+                margin-top: 40px;
                 text-align: center;
-            }
-            
-            .center-stage {
-                margin-top: 20px;
+                align-items: center;
+                width: 100%;
             }
         }
     </style>
